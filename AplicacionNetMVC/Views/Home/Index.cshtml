@@ -1,8 +1,63 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<AplicacionNetMVC.Models.Usuario>
+@{
+    ViewData["Title"] = "Lista de rgistros";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1 class="text-center">Aplicación net 6 MVC</h1>
+<h3 class="text-center">Practica Semilla Babel</h3>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="float-right">
+            <a asp-action="Crear" asp-controller="Home" class="btn btn-success">Nuevo Usuario</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card border">
+            <div class="card-header">
+                <h3 class="text-center">LIsta de usuario</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @if(Model.Count()>0){
+                       <table class="table table-bordered" width="100%" cellspacing="0">
+                           <thead>
+                               <tr>
+                                   <th>@Html.DisplayNameFor(m => m.Nombre )</th>
+                                   <th>@Html.DisplayNameFor(m => m.Telefono )</th>
+                                   <th>@Html.DisplayNameFor(m => m.Celular )</th>
+                                   <th>@Html.DisplayNameFor(m => m.Email )</th>
+                                   <th>Acciones</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               @foreach (var item in Model)
+                               {
+                                    <tr>
+                                   <th>@Html.DisplayFor(m => item.Nombre )</th>
+                                   <th>@Html.DisplayFor(m => item.Telefono )</th>
+                                   <th>@Html.DisplayFor(m => item.Celular )</th>
+                                   <th>@Html.DisplayFor(m => item.Email )</th>
+                                   <td>
+                                       <a class="btn btn-primary" asp-action="Editar" asp-route-id="@item.Id">Editar</a>
+                                       <a class="btn btn-danger" asp-action="Borrar" asp-route-id="@item.Id">Borrar</a>
+                                   </td>
+                                    </tr>
+                                }
+                            </tbody>
+                       </table>
+                    }else
+                    {
+                       <p>No hay registros</p> 
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

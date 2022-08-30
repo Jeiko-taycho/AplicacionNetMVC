@@ -1,21 +1,65 @@
-﻿using AplicacionNetMVC.Models;
+﻿using AplicacionNetMVC.Datos;
+using AplicacionNetMVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace AplicacionNetMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDBContex _contexto;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDBContex contexto)
         {
-            _logger = logger;
+            _contexto = contexto;
         }
-
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
+            return View(await _contexto.Usuario.ToListAsync());
+        }
+        [HttpGet]
+        public async Task<IActionResult> Crear()
+        {
+          
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Crear(Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                _contexto.Usuario.Add(usuario);
+                await _contexto.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Editar(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var usuario = _contexto.Usuario.Find(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return View(usuario);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Editar(Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                _contexto.Update(usuario);
+                await _contexto.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(usuario);
         }
 
         public IActionResult Privacy()
